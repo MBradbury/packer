@@ -414,13 +414,17 @@ Contents of `example_bash.sh`:
 Example of running a PowerShell script on Windows: Required customizations:
 `env_var_format` and `execute_command`
 
+You are recommended to use the [-NonInteractive parameter](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_exe?view=powershell-5.1#-noninteractive)
+to ensure commands that require interaction result in an error
+instead of hanging while waiting for input.
+
 <Tabs>
 <Tab heading="HCL2">
 
 ```hcl
 provisioner "shell-local" {
   environment_vars = ["SHELLLOCALTEST=ShellTest4"]
-  execute_command  = ["powershell.exe", "{{.Vars}} {{.Script}}"]
+  execute_command  = ["powershell.exe", "-NonInteractive", "{{.Vars}} {{.Script}}"]
   env_var_format   = "$env:%s=\"%s\"; "
   script           = "./scripts/example_ps.ps1"
 }
@@ -433,7 +437,7 @@ provisioner "shell-local" {
 {
   "type": "shell-local",
   "environment_vars": ["SHELLLOCALTEST=ShellTest4"],
-  "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
+  "execute_command": ["powershell.exe", "-NonInteractive", "{{.Vars}} {{.Script}}"],
   "env_var_format": "$env:%s=\"%s\"; ",
   "script": "./scripts/example_ps.ps1"
 }
@@ -452,7 +456,7 @@ customizations: `env_var_format`, `tempfile_extension`, and `execute_command`
 provisioner "shell-local" {
   tempfile_extension = ".ps1"
   environment_vars   = ["SHELLLOCALTEST=ShellTest5"]
-  execute_command    = ["powershell.exe", "{{.Vars}} {{.Script}}"]
+  execute_command    = ["powershell.exe", "-NonInteractive", "{{.Vars}} {{.Script}}"]
   env_var_format     = "$env:%s=\"%s\"; "
   inline             = ["write-output $env:SHELLLOCALTEST"]
 }
@@ -466,7 +470,7 @@ provisioner "shell-local" {
   "type": "shell-local",
   "tempfile_extension": ".ps1",
   "environment_vars": ["SHELLLOCALTEST=ShellTest5"],
-  "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
+  "execute_command": ["powershell.exe", "-NonInteractive", "{{.Vars}} {{.Script}}"],
   "env_var_format": "$env:%s=\"%s\"; ",
   "inline": ["write-output $env:SHELLLOCALTEST"]
 }
